@@ -1,0 +1,36 @@
+version: '2'
+
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+      - /etc/nginx/certs
+      
+  nginx-proxy-companion:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    volumes_from:
+      - nginx-proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      
+  asyncbits:
+     image: harirva/ghost-s3
+     volumes:
+      - /home/ghost/asyncbits.com:/var/lib/ghost/content
+     environment:
+     - VIRTUAL_HOST=ghost.asyncbits.com
+     - url=https://ghost.asyncbits.com
+     - AWS_ACCESS_KEY_ID=
+     - AWS_SECRET_ACCESS_KEY=
+     - AWS_DEFAULT_REGION=us-east-2
+     - GHOST_STORAGE_ADAPTER_S3_PATH_BUCKET=static.asyncbits.com
+     - GHOST_STORAGE_ADAPTER_S3_ASSET_HOST=https://static.asyncbits.com
+     - LETSENCRYPT_HOST=ghost.asyncbits.com
+     - LETSENCRYPT_EMAIL=
+
