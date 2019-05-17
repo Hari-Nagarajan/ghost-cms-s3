@@ -11,7 +11,14 @@
     }
   },
   "mail": {
-    "transport": "Direct"
+    "transport": "SMTP",
+    "options": {
+      "service": "Mailgun",
+      "host": "smtp.mailgun.org",
+      "port": 587,
+      "auth": {
+      }
+    }
   },
   "logging": {
     "transports": [
@@ -24,9 +31,9 @@
     "contentPath": "/var/lib/ghost/content"
   },
   "storage": {
-         "active": "s3",
-        "s3": {
-          "forcePathStyle": true
-        }
+    "active": "s3",
+    "s3": {
+      "forcePathStyle": true,
+    }
   }
 }
